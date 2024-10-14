@@ -1,9 +1,6 @@
 package no.oslomet.cs.algdat;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.StringJoiner;
+import java.util.*;
 
 public class SøkeBinærTre<T>  implements Beholder<T> {
 
@@ -90,11 +87,44 @@ public class SøkeBinærTre<T>  implements Beholder<T> {
     public boolean tom() { return antall == 0; }
 
     // Oppgave 1
-    public boolean leggInn(T verdi) { throw new UnsupportedOperationException(); }
+    public boolean leggInn(T verdi) {
+        Objects.requireNonNull(verdi,"Verdien kan ikke være null");
+
+        Node<T> q = null, p = rot;
+
+        int cmp = 0;
+
+        while (p != null) {
+            q=p;
+            cmp = comp.compare(verdi, p.verdi);
+            p = cmp < 0 ? p.venstre : p.høyre;
+        }
+        p = new Node<>(verdi,null,null,q);
+        if (q == null) rot = p;
+        else if (cmp < 0) q.venstre = p;
+        else q.høyre = p;
+
+        antall++;
+        return true;
+    }
 
 
     // Oppgave 2
-    public int antall(T verdi){ throw new UnsupportedOperationException(); }
+    public int antall(T verdi){
+        if(verdi==null) return 0;
+        int teller = 0;
+        Node<T> p = rot;
+        while(p!=null){
+            int cmp = comp.compare(verdi, p.verdi);
+            if (cmp < 0) p = p.venstre;
+            else if (cmp > 0) p = p.høyre;
+            else{
+                teller++;
+                p = p.høyre;
+            }
+        }
+        return teller;
+    }
 
     // Oppgave 3
     private Node<T> førstePostorden(Node<T> p) {
