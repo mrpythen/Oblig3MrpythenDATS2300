@@ -128,12 +128,38 @@ public class SøkeBinærTre<T>  implements Beholder<T> {
 
     // Oppgave 3
     private Node<T> førstePostorden(Node<T> p) {
-        throw new UnsupportedOperationException();
+        while (p.venstre != null || p.høyre != null) {
+            if (p.venstre != null) {
+                p = p.venstre;
+            } else {
+                p = p.høyre;
+            }
+        }
+        return p;
     }
 
     private Node<T> nestePostorden(Node<T> p) {
-        throw new UnsupportedOperationException();
+        Node<T> forelder = p.forelder;
+
+        if (forelder == null) {
+            return null;
+        }
+        if (forelder.høyre == p || forelder.høyre == null) {
+            return forelder;
+        }
+
+        p = forelder.høyre;
+        while (p.venstre != null || p.høyre != null) {
+            if (p.venstre != null) {
+                p = p.venstre;
+            } else {
+                p = p.høyre;
+            }
+        }
+
+        return p;
     }
+
 
     // Oppgave 4
     public void postOrden(Oppgave<? super T> oppgave) {
